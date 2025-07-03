@@ -1,1 +1,1 @@
-from cap import config  # noqa: F401
+from lap import config  # noqa: F401
