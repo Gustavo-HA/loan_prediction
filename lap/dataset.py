@@ -5,7 +5,8 @@ from tqdm import tqdm
 from typer import Typer
 from pandas import (
     DataFrame,
-    read_csv
+    read_csv,
+    concat
 )
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -20,7 +21,7 @@ from joblib import dump
 from dotenv import load_dotenv
 import numpy as np
 
-from cap.config import (
+from lap.config import (
     PROCESSED_DATA_DIR, 
     RAW_DATA_DIR,
     INTERIM_DATA_DIR,
@@ -42,7 +43,10 @@ def clean_data(
     logger.info("Cleaning data...")
     
     cleaned_df: DataFrame = df.copy()
-    
+    cleaned_df.drop(columns=["Loan_ID"], inplace=True)
+    cleaned_df["Loan_Status"] = cleaned_df["Loan_Status"].map(
+        {"Y": 1, "N": 0}
+    )
     # The only problem with the data are null values.
     # Let's impute them.
     
@@ -80,6 +84,9 @@ def preproccess_data(
 
     logger.info("Processing data...")
     
+    features_df: DataFrame = cleaned_df.drop(columns=["Loan_Status"])
+    target_df: DataFrame = cleaned_df[["Loan_Status"]]
+    
     binary_columns = ["Gender", "Married", "Education",
                       "Self_Employed", "Credit_History"]
     cat_columns = ["Property_Area"]
@@ -88,19 +95,19 @@ def preproccess_data(
     
     bin_pipeline = Pipeline(steps=[
         ("encoder", OrdinalEncoder())
-    ])
+    ]).set_output(transform="pandas")
 
     cat_pipeline = Pipeline(steps=[
-        ("encoder", OneHotEncoder())
-    ])
+        ("encoder", OneHotEncoder(sparse_output=False))
+    ]).set_output(transform="pandas")
 
     ord_pipeline = Pipeline(steps=[
         ("encoder", OrdinalEncoder())
-    ])
+    ]).set_output(transform="pandas")
 
     num_pipeline = Pipeline(steps=[
         ("scaler", StandardScaler())
-    ])
+    ]).set_output(transform="pandas")
     
     preprocessor = ColumnTransformer(
     transformers=[
@@ -110,12 +117,17 @@ def preproccess_data(
         ("numerical", num_pipeline, num_columns)
     ],
     remainder="drop"
+    ).set_output(transform="pandas")
+    
+    processed_features: DataFrame = preprocessor.fit_transform(features_df)
+    
+    processed_data: DataFrame = concat(
+        [processed_features, target_df],
+        axis=1
     )
     
-    processed_data: np.ndarray = preprocessor.fit_transform(cleaned_df)
-    
     logger.info(f"Writing processed data to {output_path}")
-    np.savetxt(output_path, processed_data, delimiter=",")
+    processed_data.to_csv(output_path, index=False)
     logger.info("Data processing complete.")
     
     logger.info(f"Saving preprocessor to {preprocessor_save_path}")
