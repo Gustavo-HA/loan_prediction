@@ -2,7 +2,7 @@
 # GLOBALS                                                                       #
 #################################################################################
 
-PROJECT_NAME = credit_approval_prediction
+PROJECT_NAME = loan_approval_prediction
 PYTHON_VERSION = 3.12
 PYTHON_INTERPRETER = python
 
