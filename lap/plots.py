@@ -4,7 +4,7 @@ from loguru import logger
 from tqdm import tqdm
 import typer
 
-from cap.config import FIGURES_DIR, PROCESSED_DATA_DIR
+from lap.config import FIGURES_DIR, PROCESSED_DATA_DIR
 
 app = typer.Typer()
 
