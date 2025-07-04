@@ -47,6 +47,7 @@ def clean_data(
     cleaned_df["Loan_Status"] = cleaned_df["Loan_Status"].map(
         {"Y": 1, "N": 0}
     )
+    
     # The only problem with the data are null values.
     # Let's impute them.
     
@@ -76,7 +77,8 @@ def clean_data(
 @task(name="process_data")
 def preproccess_data(
     input_path: Path = INTERIM_DATA_DIR / "cleaned.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "processed.csv",
+    output_path: Path = PROCESSED_DATA_DIR / "features.csv",
+    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
     preprocessor_save_path: Path = MODELS_DIR / "preprocessor.joblib",
 ):
     logger.info(f"Reading cleaned data from {input_path}")
@@ -121,13 +123,9 @@ def preproccess_data(
     
     processed_features: DataFrame = preprocessor.fit_transform(features_df)
     
-    processed_data: DataFrame = concat(
-        [processed_features, target_df],
-        axis=1
-    )
-    
     logger.info(f"Writing processed data to {output_path}")
-    processed_data.to_csv(output_path, index=False)
+    processed_features.to_csv(output_path, index=False)
+    target_df.to_csv(labels_path, index=False)
     logger.info("Data processing complete.")
     
     logger.info(f"Saving preprocessor to {preprocessor_save_path}")
@@ -141,7 +139,7 @@ def preproccess_data(
 def data_preprocessing_flow(
     input_path: Path = RAW_DATA_DIR / "loan_pred.csv",
     interim_path: Path = INTERIM_DATA_DIR / "cleaned.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "processed.csv",
+    output_path: Path = PROCESSED_DATA_DIR / "features.csv",
     preprocessor_save_path: Path = MODELS_DIR / "preprocessor.joblib",
 ):
     clean_data(input_path=input_path,
@@ -154,7 +152,7 @@ def data_preprocessing_flow(
 def main(
     input_path: Path = RAW_DATA_DIR / "loan_pred.csv",
     interim_path: Path = INTERIM_DATA_DIR / "cleaned.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "processed.csv",
+    output_path: Path = PROCESSED_DATA_DIR / "features.csv",
     preprocessor_save_path: Path = MODELS_DIR / "preprocessor.joblib",
 ):
     data_preprocessing_flow(
