@@ -67,8 +67,7 @@ sync_data_up:
 
 ## Set up Python interpreter environment
 .PHONY: create_environment
-create_environment:
-	uv venv --python $(PYTHON_VERSION)
+create_environment: requirements
 	@echo ">>> New uv virtual environment created. Activate with:"
 	@echo ">>> Windows: .\\\\.venv\\\\Scripts\\\\activate"
 	@echo ">>> Unix/macOS: source ./.venv/bin/activate"
