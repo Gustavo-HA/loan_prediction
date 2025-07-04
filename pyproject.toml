@@ -3,7 +3,7 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "cap"
+name = "lap"
 version = "0.0.1"
 description = "End to end ML project about predicting credit approval."
 authors = [
@@ -32,6 +32,7 @@ dependencies = [
     "seaborn>=0.13.2",
     "tqdm",
     "typer",
+    "mlflow"
 ]
 requires-python = "~=3.12.0"
 
