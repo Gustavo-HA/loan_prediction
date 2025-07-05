@@ -32,7 +32,10 @@ dependencies = [
     "seaborn>=0.13.2",
     "tqdm",
     "typer",
-    "mlflow"
+    "mlflow",
+    "boto3>=1.39.1",
+    "xgboost>=3.0.2",
+    "hyperopt>=0.2.7",
 ]
 requires-python = "~=3.12.0"
 
