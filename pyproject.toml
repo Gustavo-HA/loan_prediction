@@ -42,14 +42,14 @@ requires-python = "~=3.12.0"
 
 [tool.ruff]
 line-length = 99
-src = ["cap"]
-include = ["pyproject.toml", "cap/**/*.py"]
+src = ["lap"]
+include = ["pyproject.toml", "lap/**/*.py"]
 
 [tool.ruff.lint]
 extend-select = ["I"]  # Add import sorting
 
 [tool.ruff.lint.isort]
-known-first-party = ["cap"]
+known-first-party = ["lap"]
 force-sort-within-sections = true
 
 [dependency-groups]
