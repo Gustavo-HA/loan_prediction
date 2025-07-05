@@ -1,13 +1,11 @@
 from pathlib import Path
 
+from dotenv import load_dotenv
+from joblib import dump
 from loguru import logger
-from tqdm import tqdm
-from typer import Typer
-from pandas import (
-    DataFrame,
-    read_csv,
-    concat
-)
+from pandas import DataFrame, read_csv
+from prefect import flow, task
+from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import (
@@ -15,17 +13,14 @@ from sklearn.preprocessing import (
     OrdinalEncoder,
     StandardScaler,
 )
-from sklearn.compose import ColumnTransformer
-from prefect import flow, task
-from joblib import dump
-from dotenv import load_dotenv
-import numpy as np
+from tqdm import tqdm
+from typer import Typer
 
 from lap.config import (
-    PROCESSED_DATA_DIR, 
-    RAW_DATA_DIR,
     INTERIM_DATA_DIR,
     MODELS_DIR,
+    PROCESSED_DATA_DIR,
+    RAW_DATA_DIR,
 )
 
 load_dotenv()

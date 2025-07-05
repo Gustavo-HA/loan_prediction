@@ -1,20 +1,20 @@
 from pathlib import Path
-import mlflow
-from pandas import DataFrame, read_csv
-from sklearn.svm import SVC
-from mlflow.models import infer_signature
-from mlflow.client import MlflowClient
-import joblib
-from prefect import flow, task, get_run_logger
 
+import joblib
 from loguru import logger
+import mlflow
+from mlflow.client import MlflowClient
+from mlflow.models import infer_signature
+from pandas import DataFrame, read_csv
+from prefect import flow, get_run_logger, task
+from sklearn.svm import SVC
 import typer
 
 from lap.config import (
+    MLFLOW_EXPERIMENT_NAME,
+    MLFLOW_TRACKING_URI,
     MODELS_DIR,
     PROCESSED_DATA_DIR,
-    MLFLOW_TRACKING_URI,
-    MLFLOW_EXPERIMENT_NAME,
 )
 
 app = typer.Typer()
@@ -65,7 +65,7 @@ def train_final_model(
     model_output_path: Path,
 ):
     """Trains, logs, registers, and saves the final model."""
-    with mlflow.start_run(run_name="Final_Model_Training") as run:
+    with mlflow.start_run(run_name="Final_Model_Training"):
         logger.info("Training final model with best parameters...")
         mlflow.log_params(best_params)
         mlflow.set_tag("source_hp_optim_run_id", best_run_id)

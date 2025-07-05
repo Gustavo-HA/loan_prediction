@@ -1,15 +1,15 @@
 from pathlib import Path
-from pandas import DataFrame, read_csv
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.svm import SVC
-import mlflow
-from mlflow.client import MlflowClient
-from hyperopt import fmin, tpe, hp, STATUS_OK, Trials, space_eval
-from prefect import flow, task, get_run_logger
+
+from hyperopt import STATUS_OK, Trials, fmin, hp, space_eval, tpe
 from loguru import logger
+import mlflow
+from pandas import DataFrame, read_csv
+from prefect import flow, get_run_logger, task
+from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.svm import SVC
 import typer
 
-from lap.config import PROCESSED_DATA_DIR, MLFLOW_TRACKING_URI, MLFLOW_EXPERIMENT_NAME
+from lap.config import MLFLOW_EXPERIMENT_NAME, MLFLOW_TRACKING_URI, PROCESSED_DATA_DIR
 
 app = typer.Typer()
 

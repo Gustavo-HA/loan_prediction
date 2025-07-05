@@ -1,34 +1,21 @@
 from pathlib import Path
-from pandas import DataFrame, read_csv
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import (
-    RandomForestClassifier,
-    GradientBoostingClassifier
-)
-from sklearn.svm import SVC
-from xgboost import XGBClassifier
-from sklearn.metrics import (
-    accuracy_score,
-    precision_score,
-    recall_score,
-    f1_score
-)
-from prefect import flow, task, get_run_logger
-import mlflow
-from mlflow.models import infer_signature
-from mlflow.client import MlflowClient
 
 from loguru import logger
+import mlflow
+from mlflow.client import MlflowClient
+from mlflow.models import infer_signature
+from pandas import DataFrame, read_csv
+from prefect import flow, get_run_logger, task
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
 from tqdm import tqdm
 import typer
+from xgboost import XGBClassifier
 
-from lap.config import (
-    MODELS_DIR,
-    PROCESSED_DATA_DIR,
-    MLFLOW_EXPERIMENT_NAME,
-    MLFLOW_TRACKING_URI
-)
+from lap.config import MLFLOW_EXPERIMENT_NAME, MLFLOW_TRACKING_URI, PROCESSED_DATA_DIR
 
 app = typer.Typer()
 
