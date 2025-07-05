@@ -1,0 +1,19 @@
+# Git
+.git
+.gitignore
+
+# Python virtual environment and cache
+.venv
+__pycache__/
+*.pyc
+.ruff_cache/
+
+# Unnecessary project folders for inference
+data/
+notebooks/
+tests/
+docs/
+references/
+
+# Local environment files
+.env
