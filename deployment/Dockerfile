@@ -3,7 +3,8 @@ FROM public.ecr.aws/lambda/python:3.12
 RUN pip install -U pip
 RUN pip install uv
 
-COPY [ "pyproject.toml", "./"]
+COPY [ "./pyproject.toml", "./README.md", "./LICENSE","./" ]
+COPY lap/ ./lap/
 
 RUN uv pip install --system .
 
