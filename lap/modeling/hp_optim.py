@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.svm import SVC
 import mlflow
 from mlflow.client import MlflowClient
-from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
+from hyperopt import fmin, tpe, hp, STATUS_OK, Trials, space_eval
 from prefect import flow, task, get_run_logger
 from loguru import logger
 import typer
@@ -13,11 +13,12 @@ from lap.config import PROCESSED_DATA_DIR, MLFLOW_TRACKING_URI, MLFLOW_EXPERIMEN
 
 app = typer.Typer()
 
+
 @task(name="hyperparameter_optimization")
 def optimize_hyperparameters(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    num_trials: int = 50,
+    num_trials: int = 20,
 ):
     """This function will perform hyperparameter optimization for the SVC model."""
     
@@ -41,7 +42,7 @@ def optimize_hyperparameters(
             score = cross_val_score(model, X_train, y_train.values.ravel(),
                                     cv=5, scoring='f1_weighted').mean()
             
-            mlflow.log_metric("f1_score", score)
+            mlflow.log_metric("f1_weighted_cv_score", score)
             
             return {'loss': -score, 'status': STATUS_OK}
 
@@ -52,27 +53,30 @@ def optimize_hyperparameters(
     }
 
     trials = Trials()
-    best_result = fmin(
+    best_params_raw = fmin(
         fn=objective,
         space=search_space,
         algo=tpe.suggest,
         max_evals=num_trials,
         trials=trials
     )
-    
-    logger.info(f"Best parameters found: {best_result}")
-    
-    # Log the best trial to the parent run
+
+    best_params = space_eval(search_space, best_params_raw)
+    logger.info(f"Best parameters found: {best_params}")
+
+    # Log the best trial information to the parent run
     best_run = sorted(trials.results, key=lambda x: x['loss'])[0]
-    mlflow.log_metric("best_f1_score", -best_run['loss'])
-    
+    mlflow.log_metric("best_cv_f1_score", -best_run['loss'])
+    mlflow.log_params(best_params)
+
     return trials
 
-@flow(name="Hyperparameter Optimization Flow")
+
+@flow(name="Hyperparameter Optimization")
 def hp_optim_flow(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    num_trials: int = 50,
+    num_trials: int = 20,
 ):
     logger.remove()
     logger.add(sink=get_run_logger().info, format="{message}")
@@ -91,7 +95,7 @@ def hp_optim_flow(
 def main(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    num_trials: int = 50,
+    num_trials: int = 20,
 ):
     hp_optim_flow(
         features_path=features_path,

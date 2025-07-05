@@ -130,7 +130,7 @@ def select_best_model():
         logger.warning("No runs found.")
 
 @flow(
-    name="Model Training",
+    name="Model Selection",
 )
 def training_flow(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
