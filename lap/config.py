@@ -25,7 +25,7 @@ FIGURES_DIR = REPORTS_DIR / "figures"
 # MLFlow
 MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
 if not MLFLOW_TRACKING_URI:
-    MLFLOW_TRACKING_URI = "http://localhost:5000" # Default MLflow tracking URI
+    MLFLOW_TRACKING_URI = "http://localhost:5000"  # Default MLflow tracking URI
 MLFLOW_EXPERIMENT_NAME = "loan_approval_prediction_test"
 
 # If tqdm is installed, configure loguru with tqdm.write

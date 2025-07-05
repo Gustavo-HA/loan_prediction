@@ -40,8 +40,8 @@ def search_best_run(experiment_name: str):
     best_run = runs[0]
     best_params = best_run.data.params
     # Convert string params to their correct types
-    best_params['C'] = float(best_params['C'])
-    best_params['gamma'] = float(best_params['gamma'])
+    best_params["C"] = float(best_params["C"])
+    best_params["gamma"] = float(best_params["gamma"])
     logger.success(f"Found best parameters from run {best_run.info.run_id}: {best_params}")
     return best_params, best_run.info.run_id
 
@@ -82,10 +82,9 @@ def train_final_model(
             signature=signature,
             registered_model_name=model_name,
         )
-        
+
         logger.success(
-            f"Model registered as '{model_name}' "
-            f"version {model_info.registered_model_version}."
+            f"Model registered as '{model_name}' version {model_info.registered_model_version}."
         )
 
         # Save the model locally
