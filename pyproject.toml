@@ -5,9 +5,9 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "lap"
 version = "0.0.1"
-description = "End to end ML project about predicting credit approval."
+description = "End to end ML project about predicting loan approval."
 authors = [
-  { name = "Gustavo Hern\u00e1ndez Angeles" },
+  { name = "Gustavo Hernández Angeles" },
 ]
 license = { file = "LICENSE" }
 readme = "README.md"
@@ -16,26 +16,13 @@ classifiers = [
     "License :: OSI Approved :: MIT License"
 ]
 dependencies = [
-    "awscli",
-    "ipython",
-    "jupyterlab",
-    "loguru",
-    "matplotlib",
-    "notebook",
     "numpy",
     "pandas",
     "pip",
-    "pytest",
-    "python-dotenv",
-    "ruff",
-    "scikit-learn",
-    "seaborn>=0.13.2",
-    "tqdm",
+    "scikit-learn==1.7.0",
     "typer",
     "mlflow",
     "boto3>=1.39.1",
-    "xgboost>=3.0.2",
-    "hyperopt>=0.2.7",
 ]
 requires-python = "~=3.12.0"
 
@@ -43,7 +30,7 @@ requires-python = "~=3.12.0"
 [tool.ruff]
 line-length = 99
 src = ["lap"]
-include = ["pyproject.toml", "lap/**/*.py"]
+include = ["pyproject.toml", "lap/**/*.py", "deployment/**/*.py"]
 
 [tool.ruff.lint]
 extend-select = ["I"]  # Add import sorting
@@ -56,5 +43,18 @@ force-sort-within-sections = true
 dev = [
     "prefect>=3.4.7",
     "pytest>=8.4.1",
+    "xgboost>=3.0.2",
+    "hyperopt>=0.2.7",
+    "seaborn>=0.13.2",
+    "tqdm",
+    "ruff",
+    "awscli",
+    "ipython",
+    "jupyterlab",
+    "loguru",
+    "matplotlib",
+    "notebook",
+    "pytest",
+    "python-dotenv",    
 ]
 

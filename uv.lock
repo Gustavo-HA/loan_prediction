@@ -1276,62 +1276,61 @@ name = "lap"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
-    { name = "awscli" },
     { name = "boto3" },
+    { name = "mlflow" },
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "pip" },
+    { name = "scikit-learn" },
+    { name = "typer" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "awscli" },
     { name = "hyperopt" },
     { name = "ipython" },
     { name = "jupyterlab" },
     { name = "loguru" },
     { name = "matplotlib" },
-    { name = "mlflow" },
     { name = "notebook" },
-    { name = "numpy" },
-    { name = "pandas" },
-    { name = "pip" },
+    { name = "prefect" },
     { name = "pytest" },
     { name = "python-dotenv" },
     { name = "ruff" },
-    { name = "scikit-learn" },
     { name = "seaborn" },
     { name = "tqdm" },
-    { name = "typer" },
     { name = "xgboost" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "prefect" },
-    { name = "pytest" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "awscli" },
     { name = "boto3", specifier = ">=1.39.1" },
+    { name = "mlflow" },
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "pip" },
+    { name = "scikit-learn", specifier = "==1.7.0" },
+    { name = "typer" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "awscli" },
     { name = "hyperopt", specifier = ">=0.2.7" },
     { name = "ipython" },
     { name = "jupyterlab" },
     { name = "loguru" },
     { name = "matplotlib" },
-    { name = "mlflow" },
     { name = "notebook" },
-    { name = "numpy" },
-    { name = "pandas" },
-    { name = "pip" },
+    { name = "prefect", specifier = ">=3.4.7" },
     { name = "pytest" },
+    { name = "pytest", specifier = ">=8.4.1" },
     { name = "python-dotenv" },
     { name = "ruff" },
-    { name = "scikit-learn" },
     { name = "seaborn", specifier = ">=0.13.2" },
     { name = "tqdm" },
-    { name = "typer" },
     { name = "xgboost", specifier = ">=3.0.2" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "prefect", specifier = ">=3.4.7" },
-    { name = "pytest", specifier = ">=8.4.1" },
 ]
 
 [[package]]
