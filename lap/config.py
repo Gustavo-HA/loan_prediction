@@ -2,6 +2,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from loguru import logger
+import os
 
 # Load environment variables from .env file if it exists
 load_dotenv()
@@ -20,6 +21,12 @@ MODELS_DIR = PROJ_ROOT / "models"
 
 REPORTS_DIR = PROJ_ROOT / "reports"
 FIGURES_DIR = REPORTS_DIR / "figures"
+
+# MLFlow
+MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
+if not MLFLOW_TRACKING_URI:
+    MLFLOW_TRACKING_URI = "http://localhost:5000" # Default MLflow tracking URI
+MLFLOW_EXPERIMENT_NAME = "loan_approval_prediction"
 
 # If tqdm is installed, configure loguru with tqdm.write
 # https://github.com/Delgan/loguru/issues/135
