@@ -123,7 +123,8 @@ def select_best_model():
     best_run = runs[0] if runs else None
     
     if best_run:
-        logger.success(f"Best model found: {best_run.data.tags['model_name']} with test F1 score: {best_run.data.metrics['test_f1']}")
+        logger.success(f"Best model found: {best_run.data.tags['model_name']}" \
+            + "with test F1 score: {best_run.data.metrics['test_f1']}")
         logger.info(f"Run ID: {best_run.info.run_id}")
     else:
         logger.warning("No runs found.")
