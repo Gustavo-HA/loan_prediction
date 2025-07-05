@@ -184,3 +184,18 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+*.tfvars.json
+
+# Crash log files
+crash.log
+crash.*.log
