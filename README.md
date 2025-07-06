@@ -6,9 +6,9 @@
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
 
-This project is intended to be the capstone project for the [MLOps Zoomcamp](https://github.com/DataTalksClub/mlops-zoomcamp) course provided by DataTalks.Club
+This project serves as the capstone for the [MLOps Zoomcamp](https://github.com/DataTalksClub/mlops-zoomcamp) by DataTalks.Club. It applies the MLOps principles learned throughout the course to a real-world classification problem.
 
-For this task we'll be using a dataset sourced by [Kaggle](reference-to-dataset.com). Preliminary data analysis was conducted (`notebooks/`) to gain insights and guide further development.
+The task is to predict loan eligibility using a dataset from [Kaggle](https://www.kaggle.com/datasets/altruist/loan-prediction-problem-dataset). Preliminary data analysis, which guided the development process, can be found in the `notebooks/` directory.
 
 ## Task Description
 
