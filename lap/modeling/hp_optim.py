@@ -89,6 +89,7 @@ def main(
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
     num_trials: int = 20,
 ):
+    """Runs the hyperparameter optimization flow."""
     hp_optim_flow(features_path=features_path, labels_path=labels_path, num_trials=num_trials)
 
 

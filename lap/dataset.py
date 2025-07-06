@@ -1,10 +1,11 @@
 from pathlib import Path
 
+import typer
 from dotenv import load_dotenv
 from joblib import dump
 from loguru import logger
 from pandas import DataFrame, read_csv
-from prefect import flow, task
+from prefect import flow, get_run_logger, task
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -14,7 +15,6 @@ from sklearn.preprocessing import (
     StandardScaler,
 )
 from tqdm import tqdm
-from typer import Typer
 
 from lap.config import (
     INTERIM_DATA_DIR,
@@ -25,7 +25,7 @@ from lap.config import (
 
 load_dotenv()
 
-app: Typer = Typer()
+app = typer.Typer()
 
 
 @task(name="clean_data")
@@ -72,14 +72,11 @@ def clean_data(
 
 @task(name="process_data")
 def preproccess_data(
-    input_path: Path = INTERIM_DATA_DIR / "cleaned.csv",
+    cleaned_df: DataFrame,
     output_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
     preprocessor_save_path: Path = MODELS_DIR / "preprocessor.joblib",
 ):
-    logger.info(f"Reading cleaned data from {input_path}")
-    cleaned_df: DataFrame = read_csv(input_path)
-
     logger.info("Processing data...")
 
     features_df: DataFrame = cleaned_df.drop(columns=["Loan_Status"])
@@ -110,46 +107,55 @@ def preproccess_data(
         remainder="drop",
     ).set_output(transform="pandas")
 
-    processed_features: DataFrame = preprocessor.fit_transform(features_df)
+    transformed_df = preprocessor.fit_transform(features_df)
 
-    logger.info(f"Writing processed data to {output_path}")
-    processed_features.to_csv(output_path, index=False)
+    logger.info(f"Writing features to {output_path}")
+    transformed_df.to_csv(output_path, index=False)
+
+    logger.info(f"Writing labels to {labels_path}")
     target_df.to_csv(labels_path, index=False)
-    logger.info("Data processing complete.")
 
     logger.info(f"Saving preprocessor to {preprocessor_save_path}")
     dump(preprocessor, preprocessor_save_path)
-    logger.info("Preprocessor saved successfully.")
+    logger.info(f"Preprocessor saved to {preprocessor_save_path}")
+    logger.info("Data processing complete.")
 
-    return preprocessor
 
-
-@flow(name="Data Preprocessing Flow")
+@flow(name="Data Preprocessing")
 def data_preprocessing_flow(
-    input_path: Path = RAW_DATA_DIR / "loan_pred.csv",
-    interim_path: Path = INTERIM_DATA_DIR / "cleaned.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "features.csv",
+    raw_data_path: Path = RAW_DATA_DIR / "loan_pred.csv",
+    cleaned_data_path: Path = INTERIM_DATA_DIR / "cleaned.csv",
+    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
+    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
     preprocessor_save_path: Path = MODELS_DIR / "preprocessor.joblib",
 ):
-    clean_data(input_path=input_path, output_path=interim_path)
+    """Cleans and preprocesses the data, preparing it for model training."""
+    logger.remove()
+    logger.add(sink=get_run_logger().info, format="{message}")
+
+    cleaned_df = clean_data(input_path=raw_data_path, output_path=cleaned_data_path)
     preproccess_data(
-        input_path=interim_path,
-        output_path=output_path,
+        cleaned_df=cleaned_df,
+        output_path=features_path,
+        labels_path=labels_path,
         preprocessor_save_path=preprocessor_save_path,
     )
 
 
 @app.command()
 def main(
-    input_path: Path = RAW_DATA_DIR / "loan_pred.csv",
-    interim_path: Path = INTERIM_DATA_DIR / "cleaned.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "features.csv",
+    raw_data_path: Path = RAW_DATA_DIR / "loan_pred.csv",
+    cleaned_data_path: Path = INTERIM_DATA_DIR / "cleaned.csv",
+    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
+    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
     preprocessor_save_path: Path = MODELS_DIR / "preprocessor.joblib",
 ):
+    """Runs the complete data preprocessing pipeline."""
     data_preprocessing_flow(
-        input_path=input_path,
-        interim_path=interim_path,
-        output_path=output_path,
+        raw_data_path=raw_data_path,
+        cleaned_data_path=cleaned_data_path,
+        features_path=features_path,
+        labels_path=labels_path,
         preprocessor_save_path=preprocessor_save_path,
     )
 
