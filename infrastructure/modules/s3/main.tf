@@ -3,6 +3,6 @@ resource "aws_s3_bucket" "s3_bucket" {
     acl = "private"
 }
 
-output "name" {
+output "bucket_name" {
     value = aws_s3_bucket.s3_bucket.bucket
 }
