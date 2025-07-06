@@ -43,11 +43,22 @@ module "s3_bucket" {
     bucket_name = "${var.model_bucket}-${var.project_id}"
 }
 
-# image repository
+# image registry
 module "ecr_image" {
     source      = "./modules/ecr"
     ecr_repo_name = "${var.ecr_repo_name}-${var.project_id}"
     account_id = local.account_id
     lambda_function_local_path = var.lambda_function_local_path
     docker_image_local_path = var.docker_image_local_path
+}
+
+# lambda function
+module "lambda_function" {
+    source = "./modules/lambda"
+    image_uri = module.ecr_image.image_uri
+    lambda_function_name = "${var.lambda_function_name}_${var.project_id}"
+    model_bucket = module.s3_bucket.bucket_name
+    output_stream_name = "${var.output_stream_name}_${var.project_id}"
+    output_stream_arn = module.output_kinesis_stream.stream_arn
+    source_stream_arn = module.source_kinesis_stream.stream_arn
 }
