@@ -1,0 +1,7 @@
+source_stream_name="stg-loan-events"
+output_stream_name="stg-loan-predictions"
+model_bucket="stg-mlflow-models"
+ecr_repo_name="stg-stream-model-loan-prediction"
+lambda_function_local_path="../deployment/lambda_function.py"
+docker_image_local_path="../deployment/Dockerfile"
+lambda_function_name="stg-loan-prediction-lambda"
