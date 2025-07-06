@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import typer
 from dotenv import load_dotenv
 from joblib import dump
 from loguru import logger
@@ -15,6 +14,7 @@ from sklearn.preprocessing import (
     StandardScaler,
 )
 from tqdm import tqdm
+import typer
 
 from lap.config import (
     INTERIM_DATA_DIR,
