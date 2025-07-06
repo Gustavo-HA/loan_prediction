@@ -18,7 +18,7 @@ app = typer.Typer()
 def optimize_hyperparameters(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    num_trials: int = 20,
+    num_trials: int = 10,
 ):
     """This function will perform hyperparameter optimization for the SVC model."""
 
@@ -69,7 +69,7 @@ def optimize_hyperparameters(
 def hp_optim_flow(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    num_trials: int = 20,
+    num_trials: int = 10,
 ):
     logger.remove()
     logger.add(sink=get_run_logger().info, format="{message}")
@@ -87,7 +87,7 @@ def hp_optim_flow(
 def main(
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    num_trials: int = 20,
+    num_trials: int = 10,
 ):
     """Runs the hyperparameter optimization flow."""
     hp_optim_flow(features_path=features_path, labels_path=labels_path, num_trials=num_trials)
