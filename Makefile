@@ -83,26 +83,27 @@ create_environment: requirements
 ## Make dataset
 .PHONY: data
 data: requirements
-	$(PYTHON_INTERPRETER) lap/dataset.py
+	uv run lap/dataset.py
 
 ## Model Selection
 .PHONY: model_selection
 model_selection: requirements
-	$(PYTHON_INTERPRETER) lap/modeling/model_selection.py
+	uv run lap/modeling/model_selection.py
 
 ## Hyperparameter Optimization
 .PHONY: hp_optim
 hp_optim: requirements model_selection
-	$(PYTHON_INTERPRETER) lap/modeling/hp_optim.py
+	uv run lap/modeling/hp_optim.py
 
 ## Train Final Model
 .PHONY: train
 train: requirements
-	$(PYTHON_INTERPRETER) lap/modeling/train.py
+	uv run lap/modeling/train.py
 
 ## Run entire pipeline
 .PHONY: data_train_pipeline
-data_train_pipeline: data model_selection hp_optim train
+data_train_pipeline:
+	uv run lap/main_flow.py
 
 #################################################################################
 # Self Documenting Commands                                                     #
