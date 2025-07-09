@@ -1,7 +1,7 @@
 from pathlib import Path
+from pickle import dump
 
 from dotenv import load_dotenv
-from joblib import dump
 from loguru import logger
 from pandas import DataFrame, read_csv
 from prefect import flow, get_run_logger, task
@@ -75,7 +75,7 @@ def preproccess_data(
     cleaned_df: DataFrame,
     output_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    preprocessor_save_path: Path = MODELS_DIR / "preprocessor.joblib",
+    preprocessor_save_path: Path = MODELS_DIR / "preprocessor.pkl",
 ):
     logger.info("Processing data...")
 
@@ -127,7 +127,7 @@ def data_preprocessing_flow(
     cleaned_data_path: Path = INTERIM_DATA_DIR / "cleaned.csv",
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    preprocessor_save_path: Path = MODELS_DIR / "preprocessor.joblib",
+    preprocessor_save_path: Path = MODELS_DIR / "preprocessor.pkl",
 ):
     """Cleans and preprocesses the data, preparing it for model training."""
     logger.remove()
@@ -148,7 +148,7 @@ def main(
     cleaned_data_path: Path = INTERIM_DATA_DIR / "cleaned.csv",
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    preprocessor_save_path: Path = MODELS_DIR / "preprocessor.joblib",
+    preprocessor_save_path: Path = MODELS_DIR / "preprocessor.pkl",
 ):
     """Runs the complete data preprocessing pipeline."""
     data_preprocessing_flow(
