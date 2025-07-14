@@ -1,28 +1,28 @@
 import base64
 import json
 import os
-from pickle import load
 
 import boto3
+from joblib import load
 import mlflow
 import pandas as pd
 
 
-def get_model_location(run_id):
+def get_model_location(model_id):
     model_location = os.getenv("MODEL_LOCATION")
 
     if model_location is not None:
         return model_location
 
-    model_bucket = os.getenv("MODEL_BUCKET", "stg-mlflow-models")
-    experiment_id = os.getenv("EXPERIMENT_ID", "1")
+    model_bucket = os.getenv("MODEL_BUCKET", "gus-mlflow-artifacts")
+    experiment_id = os.getenv("EXPERIMENT_ID", "4")
 
-    model_location = f"s3://{model_bucket}/1/{experiment_id}/artifacts/model"
+    model_location = f"s3://{model_bucket}/mlartifacts/{experiment_id}/models/{model_id}/artifacts/"
     return model_location
 
 
-def load_model(run_id):
-    model_location = get_model_location()
+def load_model(model_id):
+    model_location = get_model_location(model_id)
     model = mlflow.pyfunc.load_model(model_location)
     return model
 
@@ -41,7 +41,7 @@ class ModelService:
 
     def prepare_features(self, input_record):
         # Implement feature preparation logic here
-        preprocessor = load(open("preprocessor.pkl", "rb"))
+        preprocessor = load(open("preprocessor.joblib", "rb"))
         features: pd.DataFrame = pd.DataFrame([input_record])
         features = preprocessor.transform(features)
         return features
@@ -57,7 +57,7 @@ class ModelService:
             encoded_data = record["kinesis"]["data"]
             input_record = base64_decode(encoded_data)
 
-            request = input_record["input"]
+            request:dict = input_record["input"]
             request_id = request.get("request_id", "unknown")
 
             features = self.prepare_features(request)
@@ -101,8 +101,8 @@ def create_kinesis_client():
     return boto3.client("kinesis", endpoint_url=endpoint_url)
 
 
-def init(prediction_stream_name: str, run_id: str, test_run: bool):
-    model = load_model(run_id)
+def init(prediction_stream_name: str, model_id: str, test_run: bool):
+    model = load_model(model_id)
 
     callbacks = []
 
@@ -111,6 +111,6 @@ def init(prediction_stream_name: str, run_id: str, test_run: bool):
         kinesis_callback = KinesisCallback(kinesis_client, prediction_stream_name)
         callbacks.append(kinesis_callback.put_record)
 
-    model_service = ModelService(model=model, model_version=run_id, callbacks=callbacks)
+    model_service = ModelService(model=model, model_version=model_id, callbacks=callbacks)
 
     return model_service
