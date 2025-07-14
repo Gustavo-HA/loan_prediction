@@ -192,3 +192,5 @@ cython_debug/
 # Crash log files
 crash.log
 crash.*.log
+
+*.pkl
