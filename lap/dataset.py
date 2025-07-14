@@ -1,7 +1,10 @@
+import os
 from pathlib import Path
 from pickle import dump
+import shutil
 
 from dotenv import load_dotenv
+import kagglehub
 from loguru import logger
 from pandas import DataFrame, read_csv
 from prefect import flow, get_run_logger, task
@@ -27,6 +30,20 @@ load_dotenv()
 
 app = typer.Typer()
 
+@task(name="download_data")
+def download_data(
+    dataset_name: str = "ninzaami/loan-predication",
+    output_path: Path = RAW_DATA_DIR / "loan_pred.csv",
+):
+    """
+    Downloads the dataset from Kaggle and saves it to the specified output path.
+    """
+    logger.info(f"Downloading dataset {dataset_name} to {output_path}")
+    path = Path(kagglehub.dataset_download(dataset_name))
+    file_path = path / os.listdir(path)[0]
+    shutil.copy2(file_path, output_path)
+    logger.info("Dataset downloaded successfully.")
+
 
 @task(name="clean_data")
 def clean_data(
@@ -41,9 +58,6 @@ def clean_data(
     cleaned_df: DataFrame = df.copy()
     cleaned_df.drop(columns=["Loan_ID"], inplace=True)
     cleaned_df["Loan_Status"] = cleaned_df["Loan_Status"].map({"Y": 1, "N": 0})
-
-    # The only problem with the data are null values.
-    # Let's impute them.
 
     col_w_nulls = [
         "Gender",
@@ -116,7 +130,8 @@ def preproccess_data(
     target_df.to_csv(labels_path, index=False)
 
     logger.info(f"Saving preprocessor to {preprocessor_save_path}")
-    dump(preprocessor, preprocessor_save_path)
+    with open(preprocessor_save_path, 'wb') as f:
+        dump(preprocessor, f)
     logger.info(f"Preprocessor saved to {preprocessor_save_path}")
     logger.info("Data processing complete.")
 
@@ -150,7 +165,10 @@ def main(
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
     preprocessor_save_path: Path = MODELS_DIR / "preprocessor.pkl",
 ):
-    """Runs the complete data preprocessing pipeline."""
+    """Runs the complete dataset obtention and preprocessing pipeline."""
+    
+    download_data()
+    
     data_preprocessing_flow(
         raw_data_path=raw_data_path,
         cleaned_data_path=cleaned_data_path,
