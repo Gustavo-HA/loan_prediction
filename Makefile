@@ -16,9 +16,6 @@ PYTHON_INTERPRETER = python
 requirements:
 	uv sync
 	
-
-
-
 ## Delete all compiled Python files
 .PHONY: clean
 clean:
@@ -44,25 +41,6 @@ format:
 .PHONY: test
 test:
 	python -m pytest tests
-
-
-
-## Download Data from storage system
-.PHONY: sync_data_down
-sync_data_down:
-	aws s3 sync \
-		s3://gus-mlflow-artifacts/loan_prediction/data/ \
-		data/ 
-	
-
-## Upload Data to storage system
-.PHONY: sync_data_up
-sync_data_up:
-	aws s3 sync \
-		data/ \
-		s3://gus-mlflow-artifacts/loan_prediction/data/
-	
-
 
 
 ## Set up Python interpreter environment
