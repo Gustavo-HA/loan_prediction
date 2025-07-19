@@ -17,7 +17,9 @@ def get_model_location(model_id):
     model_bucket = os.getenv("MODEL_BUCKET", "gus-mlflow-artifacts")
     experiment_id = os.getenv("EXPERIMENT_ID", "4")
 
-    model_location = f"s3://{model_bucket}/mlartifacts/{experiment_id}/models/{model_id}/artifacts/"
+    model_location = (
+        f"s3://{model_bucket}/mlartifacts/{experiment_id}/models/{model_id}/artifacts/"
+    )
     return model_location
 
 
@@ -41,7 +43,7 @@ class ModelService:
 
     def prepare_features(self, input_record):
         # Implement feature preparation logic here
-        preprocessor = load(open("preprocessor.joblib", "rb"))
+        preprocessor = load(open("preprocessor.pkl", "rb"))
         features: pd.DataFrame = pd.DataFrame([input_record])
         features = preprocessor.transform(features)
         return features
@@ -57,7 +59,7 @@ class ModelService:
             encoded_data = record["kinesis"]["data"]
             input_record = base64_decode(encoded_data)
 
-            request:dict = input_record["input"]
+            request: dict = input_record["input"]
             request_id = request.get("request_id", "unknown")
 
             features = self.prepare_features(request)
@@ -110,6 +112,8 @@ def init(prediction_stream_name: str, model_id: str, test_run: bool):
         kinesis_client = create_kinesis_client()
         kinesis_callback = KinesisCallback(kinesis_client, prediction_stream_name)
         callbacks.append(kinesis_callback.put_record)
+    else:
+        print("Running in test mode, no Kinesis callback will be used.")
 
     model_service = ModelService(model=model, model_version=model_id, callbacks=callbacks)
 
