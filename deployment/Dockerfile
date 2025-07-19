@@ -10,6 +10,6 @@ RUN uv pip install --system .
 
 COPY [ "./deployment/lambda_function.py", "./deployment/model.py", "./" ]
 
-COPY [ "./models/preprocessor.joblib", "./" ]
+COPY [ "./models/preprocessor.pkl", "./" ]
 
 CMD [ "lambda_function.lambda_handler" ]
