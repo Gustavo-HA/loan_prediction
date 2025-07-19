@@ -1,3 +1,4 @@
+aws_region="us-east-2"
 source_stream_name="stg-loan-events"
 output_stream_name="stg-loan-predictions"
 model_bucket="stg-mlflow-models"
