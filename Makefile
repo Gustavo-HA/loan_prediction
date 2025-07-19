@@ -83,6 +83,20 @@ train: requirements
 data_train_pipeline:
 	uv run lap/main_flow.py
 
+## Instantiate Amazon Services
+.PHONY: aws_services
+aws_services:
+	cd infrastructure && \
+	terraform init && \
+	terraform plan -var-file=./vars/stg.tfvars && \
+	terraform apply -var-file=./vars/stg.tfvars
+
+## Destroy Amazon Services
+.PHONY: aws_destroy
+aws_destroy:
+	cd infrastructure && \
+	terraform destroy -var-file=./vars/stg.tfvars
+
 #################################################################################
 # Self Documenting Commands                                                     #
 #################################################################################

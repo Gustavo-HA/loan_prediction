@@ -33,6 +33,83 @@ A successful model requires more than just accurate predictions. This project in
 * ruff: Linter & code formatter
 * Evidently: Model monitoring
 
+## Requirements
+
+Before setting up the whole project you need to have installed:
+* Make
+* [uv](https://docs.astral.sh/uv/getting-started/installation/) Package Manager
+* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html): Use `aws configure` to set up your IAM credentials.
+* [Terraform](https://developer.hashicorp.com/terraform/install) for Infrastructure as Code
+
+## Project Setup
+
+Clone the project from the repository and move to its directory.
+
+```bash
+git clone https://github.com/Gustavo-HA/loan_prediction.git
+cd loan_prediction
+```
+
+Create the environment.
+
+```bash
+make create_environment
+```
+
+Activate it using the command for your OS
+
+```bash
+# Linux/MacOS
+source ./venv/bin/activate
+
+# Windows
+.\venv\bin\activate
+```
+
+Create, clean and preprocess the dataset using:
+
+```bash
+make data
+```
+
+### Cloud Infrastructure
+
+Before doing any training, we must track the experiments with MLflow. We'll be using AWS for the cloud services and Terraform to create the S3 bucket and the online service with Kinesis and Lambda. This is a tricky part and may need to change some variables to work the best in your device, here are some easy steps to ensure its functionality:
+* Create a S3 bucket to store the tfstate
+* Go to `infrastructure/main.tf` and adjust this code section to your s3 bucket
+```hcl
+terraform {
+    required_version = ">= 1.0.0"
+    backend "s3" {
+        bucket = "tf-state-loan-prediction"
+        key = "loan-prediction.tfstate"
+        region = "us-east-2"
+        encrypt = true
+    }
+}
+```
+* Similarly, update the aws region and the S3 bucket variable in `infrastructure/vars/stg.tfvars` to ensure the bucket name is globally unique. For more information, see the [AWS S3 bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html).
+
+ We can instantiate the services using
+
+```bash
+make aws_services
+```
+
+It then will ask you permission to run the services, type "yes" and hit enter.
+
+<p align="center">
+    <img src="./reports/figures/terraform_create.png" width="50%" alt="Terraform apply command output." />
+</p>
+
+> ⚠️ **S3 bucket names must be globally unique.** If you get an error that the bucket name is already taken, update your Terraform config with a unique name (e.g., add your initials or a random string), remove the failed resource from Terraform state (`terraform state rm aws_s3_bucket.<bucket_resource_name>`), and re-run `make aws_services`. See [AWS S3 bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html) for details.
+
+If you want to set an online tracking server you need to manually create an EC2 instance, set boundary rules to the S3 bucket to store the model artifacts and run the following command in the terminal. Otherwise, you could do it locally; open a new terminal, activate the environment and run.
+
+```bash
+mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://<MODEL-S3-BUCKET>
+```
+
 
 ## Project Organization
 
@@ -61,8 +138,6 @@ loan_prediction/
 │
 ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
 │                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
 │
 └── lap   <- Source code for use in this project.
     │
