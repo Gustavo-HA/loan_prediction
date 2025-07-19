@@ -30,6 +30,7 @@ load_dotenv()
 
 app = typer.Typer()
 
+
 @task(name="download_data")
 def download_data(
     dataset_name: str = "ninzaami/loan-predication",
@@ -130,7 +131,7 @@ def preproccess_data(
     target_df.to_csv(labels_path, index=False)
 
     logger.info(f"Saving preprocessor to {preprocessor_save_path}")
-    with open(preprocessor_save_path, 'wb') as f:
+    with open(preprocessor_save_path, "wb") as f:
         dump(preprocessor, f)
     logger.info(f"Preprocessor saved to {preprocessor_save_path}")
     logger.info("Data processing complete.")
@@ -166,9 +167,9 @@ def main(
     preprocessor_save_path: Path = MODELS_DIR / "preprocessor.pkl",
 ):
     """Runs the complete dataset obtention and preprocessing pipeline."""
-    
+
     download_data()
-    
+
     data_preprocessing_flow(
         raw_data_path=raw_data_path,
         cleaned_data_path=cleaned_data_path,
