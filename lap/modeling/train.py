@@ -99,7 +99,7 @@ def final_training_flow(
     model_name: str = "svc-loan-predictor",
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    model_output_path: Path = MODELS_DIR / "model.joblib",
+    model_output_path: Path = MODELS_DIR / "model.pkl",
 ):
     """Orchestrates the final model training process."""
     logger.remove()
@@ -125,7 +125,7 @@ def main(
     model_name: str = "svc-loan-predictor",
     features_path: Path = PROCESSED_DATA_DIR / "features.csv",
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    model_output_path: Path = MODELS_DIR / "model.joblib",
+    model_output_path: Path = MODELS_DIR / "model.pkl",
 ):
     """CLI entrypoint to run the final training flow."""
     final_training_flow(
