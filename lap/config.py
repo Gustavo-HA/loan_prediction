@@ -23,17 +23,5 @@ REPORTS_DIR = PROJ_ROOT / "reports"
 FIGURES_DIR = REPORTS_DIR / "figures"
 
 # MLFlow
-MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
-if not MLFLOW_TRACKING_URI:
-    MLFLOW_TRACKING_URI = "http://localhost:5000"  # Default MLflow tracking URI
-MLFLOW_EXPERIMENT_NAME = "loan_approval_prediction_test"
-
-# If tqdm is installed, configure loguru with tqdm.write
-# https://github.com/Delgan/loguru/issues/135
-try:
-    from tqdm import tqdm
-
-    logger.remove(0)
-    logger.add(lambda msg: tqdm.write(msg, end=""), colorize=True)
-except ModuleNotFoundError:
-    pass
+MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5000")
+MLFLOW_EXPERIMENT_NAME = os.getenv("MLFLOW_EXPERIMENT_NAME", "loan_approval_prediction_test")
