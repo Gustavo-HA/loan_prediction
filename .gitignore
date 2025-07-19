@@ -194,3 +194,5 @@ crash.log
 crash.*.log
 
 *.pkl
+
+*.db
