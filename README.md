@@ -13,7 +13,7 @@ The task is to predict loan eligibility using a dataset from [Kaggle](https://ww
 ## Task Description
 
 ### The Challenge
-Manually reviewing loan applications is **slow, expensive, and can lead to inconsistent decisions**. The core challenge is to replace this subjective process with a fast, data-driven system to accurately assess an applicant's eligibility in real time.
+Manually reviewing loan applications is **slow, expensive, and can lead to inconsistent decisions**. The core challenge is to replace this subjective process with a fast, data-driven system to accurately assess an applicant's eligibility in **real time**.
 
 ### The Solution
 This project builds a ML classification model to automate the loan eligibility process. Using applicant details like income, credit history, and marital status, the model provides instant recommendations. The goal is to increase efficiency, reduce human bias, and create a scalable system for real-time loan approval.
@@ -102,13 +102,22 @@ It then will ask you permission to run the services, type "yes" and hit enter.
     <img src="./reports/figures/terraform_create.png" width="50%" alt="Terraform apply command output." />
 </p>
 
-> ⚠️ **S3 bucket names must be globally unique.** If you get an error that the bucket name is already taken, update your Terraform config with a unique name (e.g., add your initials or a random string), remove the failed resource from Terraform state (`terraform state rm aws_s3_bucket.<bucket_resource_name>`), and re-run `make aws_services`. See [AWS S3 bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html) for details.
-
 If you want to set an online tracking server you need to manually create an EC2 instance, set boundary rules to the S3 bucket to store the model artifacts and run the following command in the terminal. Otherwise, you could do it locally; open a new terminal, activate the environment and run.
 
 ```bash
 mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://<MODEL-S3-BUCKET>
 ```
+Now that you have the tracking server running, you can proceed to train several models, perform hyperparameter optimization on the best algorithm and train the final model with
+
+```bash
+make data_train_pipeline 
+```
+
+This previous command will also put the final model in the Mlflow's Model Registry (Locally on [http://localhost:5000/#/experiments/1/models](http://localhost:5000/#/experiments/1/models)). From there, one is able to retrieve the model id 
+
+<p align="center">
+    <img src="./reports/figures/modelid.png" width="50%" alt="Terraform apply command output." />
+</p>
 
 
 ## Project Organization
