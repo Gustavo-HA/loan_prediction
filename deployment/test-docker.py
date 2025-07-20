@@ -1,0 +1,29 @@
+import requests
+
+data = {
+    "Records": [
+        {
+            "kinesis": {
+                "kinesisSchemaVersion": "1.0",
+                "partitionKey": "1",
+                "sequenceNumber": "49630081666084879290581185630324770398608704880802529282",
+                "data": "ewogICAgImlucHV0IiA6IHsKICAgICAgICAiR2VuZGVyIjogIk1hbGUiLAogICAgICAgICJNYXJyaWVkIjogIlllcyIsCiAgICAgICAgIkRlcGVuZGVudHMiOiAiMiIsCiAgICAgICAgIkVkdWNhdGlvbiI6ICJHcmFkdWF0ZSIsCiAgICAgICAgIlNlbGZfRW1wbG95ZWQiOiAiTm8iLAogICAgICAgICJBcHBsaWNhbnRJbmNvbWUiOiA1MDAwLAogICAgICAgICJDb2FwcGxpY2FudEluY29tZSI6IDI1MDAuMCwKICAgICAgICAiTG9hbkFtb3VudCI6IDIwMC4wLAogICAgICAgICJMb2FuX0Ftb3VudF9UZXJtIjogMzYwLjAsCiAgICAgICAgIkNyZWRpdF9IaXN0b3J5IjogMS4wLAogICAgICAgICJQcm9wZXJ0eV9BcmVhIjogIlVyYmFuIgogICAgfSwKICAgICJyZXF1ZXN0X2lkIjogIjEyMzQ1Igp9Cg==",
+                "approximateArrivalTimestamp": 1654161514.132,
+            },
+            "eventSource": "aws:kinesis",
+            "eventVersion": "1.0",
+            "eventID": "shardId-000000000000:49630081666084879290581185630324770398608704880802529282",
+            "eventName": "aws:kinesis:record",
+            "invokeIdentityArn": "arn:aws:iam::XXXXXXXXX:role/lambda-kinesis-role",
+            "awsRegion": "us-east-2",
+            "eventSourceARN": "arn:aws:kinesis:us-east-2:XXXXXXXXX:stream/ride_events",
+        }
+    ]
+}
+
+
+url = "http://localhost:8080/2015-03-31/functions/function/invocations"
+
+responde = requests.post(url=url, json=data)
+
+print(responde.json())

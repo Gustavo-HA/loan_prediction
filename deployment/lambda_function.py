@@ -2,8 +2,8 @@ import os
 
 import model
 
-PREDICTIONS_STREAM_NAME = os.getenv("PREDICTIONS_STREAM_NAME", "loan_predictions")
-MODEL_ID = os.getenv("MODEL_ID", "m-37d3c61eabaa4dc68607887b2f440b4a")
+PREDICTIONS_STREAM_NAME = os.getenv("PREDICTIONS_STREAM_NAME")
+MODEL_ID = os.getenv("MODEL_ID")
 TEST_RUN = os.getenv("TEST_RUN", "False") == "True"
 
 model_service = model.init(

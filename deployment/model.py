@@ -14,8 +14,8 @@ def get_model_location(model_id):
     if model_location is not None:
         return model_location
 
-    model_bucket = os.getenv("MODEL_BUCKET", "gus-mlflow-artifacts")
-    experiment_id = os.getenv("EXPERIMENT_ID", "4")
+    model_bucket = os.getenv("MODEL_BUCKET")
+    experiment_id = os.getenv("EXPERIMENT_ID")
 
     model_location = (
         f"s3://{model_bucket}/mlartifacts/{experiment_id}/models/{model_id}/artifacts/"
