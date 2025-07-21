@@ -18,7 +18,7 @@ def get_model_location(model_id):
     experiment_id = os.getenv("EXPERIMENT_ID")
 
     model_location = (
-        f"s3://{model_bucket}/mlartifacts/{experiment_id}/models/{model_id}/artifacts/"
+        f"s3://{model_bucket}/{experiment_id}/models/{model_id}/artifacts/"
     )
     return model_location
 
