@@ -61,27 +61,27 @@ create_environment: requirements
 ## Make dataset
 .PHONY: data
 data: requirements
-	uv run lap/dataset.py
+	$(PYTHON_INTERPRETER) lap/dataset.py
 
 ## Model Selection
 .PHONY: model_selection
 model_selection: requirements
-	uv run lap/modeling/model_selection.py
+	$(PYTHON_INTERPRETER) lap/modeling/model_selection.py
 
 ## Hyperparameter Optimization
 .PHONY: hp_optim
 hp_optim: requirements model_selection
-	uv run lap/modeling/hp_optim.py
+	$(PYTHON_INTERPRETER) lap/modeling/hp_optim.py
 
 ## Train Final Model
 .PHONY: train
 train: requirements
-	uv run lap/modeling/train.py
+	$(PYTHON_INTERPRETER) lap/modeling/train.py
 
 ## Run entire pipeline
 .PHONY: data_train_pipeline
 data_train_pipeline:
-	uv run lap/main_flow.py
+	$(PYTHON_INTERPRETER) lap/main_flow.py
 
 ## Instantiate Amazon Services
 .PHONY: aws_services
