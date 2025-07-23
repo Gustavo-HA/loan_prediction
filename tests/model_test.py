@@ -120,3 +120,49 @@ def test_predict():
     prediction = model_service.predict(features)[0]
     
     assert prediction == 10, f"Expected 10, but got {prediction}"
+    
+def test_lambda_handler():
+    model_mock = ModelMock(10)
+    model_version = "Test123"
+    preprocessor = joblib.load(
+        open("./models/preprocessor.pkl", "rb")
+    )
+    model_service = model_module.ModelService(model=model_mock,
+                                              preprocessor=preprocessor,
+                                              model_version=model_version)
+    
+    data = "ewogICAgImlucHV0IiA6IHsKICAgICAgICAiR2VuZGVyIjogIk1hbGUiLAogICAgICAgICJNYXJyaWVkIjogIlllcy" +\
+        "IsCiAgICAgICAgIkRlcGVuZGVudHMiOiAiMiIsCiAgICAgICAgIkVkdWNhdGlvbiI6ICJHcmFkdWF0ZSIsCiAgICAgICAg" +\
+        "IlNlbGZfRW1wbG95ZWQiOiAiTm8iLAogICAgICAgICJBcHBsaWNhbnRJbmNvbWUiOiA1MDAwLAogICAgICAgICJDb2FwcG"+\
+        "xpY2FudEluY29tZSI6IDI1MDAuMCwKICAgICAgICAiTG9hbkFtb3VudCI6IDIwMC4wLAogICAgICAgICJMb2FuX0Ftb3Vud"+\
+        "F9UZXJtIjogMzYwLjAsCiAgICAgICAgIkNyZWRpdF9IaXN0b3J5IjogMS4wLAogICAgICAgICJQcm9wZXJ0eV9BcmVhIjo"+\
+        "gIlVyYmFuIgogICAgfSwKICAgICJyZXF1ZXN0X2lkIjogIjEyMzQ1Igp9Cg=="
+    
+    event = {
+        "Records": [
+            {
+                "kinesis": {
+                    "data": data
+                }
+            },
+        ]
+    }
+    
+    actual_predictions = model_service.lambda_handler(event)
+    
+    expected_predictions = {
+        "predictions": [
+            {
+                "model": "loan_approval_prediction_model",
+                "model_version": model_version,
+                "prediction": {
+                    "approved": True, 
+                    "request_id": "12345"
+                    },
+            }
+        ]
+    }
+    
+    assert actual_predictions == expected_predictions, \
+        f"Expected {expected_predictions}, but got {actual_predictions}"
+    
