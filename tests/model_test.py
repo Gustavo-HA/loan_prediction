@@ -99,8 +99,11 @@ class ModelMock:
 
 def test_predict():
     model_mock = ModelMock(10)
-    model_service = model_module.ModelService(model=model_mock)
-    
+    preprocessor = joblib.load(
+        open("./models/preprocessor.pkl", "rb")
+    )
+    model_service = model_module.ModelService(model=model_mock, preprocessor=preprocessor)
+
     features = {
         "binary__Gender": 1.0,
         "binary__Married": 1.0,
