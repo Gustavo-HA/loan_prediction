@@ -59,10 +59,10 @@ class ModelService:
 
         for record in event["Records"]:
             encoded_data = record["kinesis"]["data"]
-            input_record = base64_decode(encoded_data)
+            input_record: dict = base64_decode(encoded_data)
 
             request: dict = input_record["input"]
-            request_id = request.get("request_id", "unknown")
+            request_id = input_record.get("request_id", "unknown")
 
             features = self.prepare_features(request)
             prediction = self.predict(features)
