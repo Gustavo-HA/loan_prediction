@@ -17,9 +17,7 @@ def get_model_location(model_id):
     model_bucket = os.getenv("MODEL_BUCKET")
     experiment_id = os.getenv("EXPERIMENT_ID")
 
-    model_location = (
-        f"s3://{model_bucket}/{experiment_id}/models/{model_id}/artifacts/"
-    )
+    model_location = f"s3://{model_bucket}/{experiment_id}/models/{model_id}/artifacts/"
     return model_location
 
 
@@ -68,7 +66,10 @@ class ModelService:
             prediction_event = {
                 "model": "loan_approval_prediction_model",
                 "model_version": self.model_version,
-                "prediction": {"approved": bool(prediction[0]), "request_id": request_id},
+                "prediction": {
+                    "approved": bool(prediction[0]), 
+                    "request_id": request_id
+                    },
             }
 
             for callback in self.callbacks:
