@@ -3,7 +3,7 @@ import json
 import os
 
 import boto3
-from joblib import load
+import joblib
 import mlflow
 import pandas as pd
 
@@ -34,16 +34,20 @@ def base64_decode(encoded_data):
 
 
 class ModelService:
-    def __init__(self, model, model_version=None, callbacks=None):
+    def __init__(self, model, preprocessor=None, model_version=None, callbacks=None):
         self.model = model
+        self.preprocessor = preprocessor or self._load_default_preprocessor()
         self.model_version = model_version
         self.callbacks = callbacks or []
 
+    def _load_default_preprocessor(self):
+        """Load preprocessor from default location (used in production)"""
+        with open("./preprocessor.pkl", "rb") as f:
+            return joblib.load(f)
+
     def prepare_features(self, input_record):
-        # Implement feature preparation logic here
-        preprocessor = load(open("preprocessor.pkl", "rb"))
         features: pd.DataFrame = pd.DataFrame([input_record])
-        features = preprocessor.transform(features)
+        features = self.preprocessor.transform(features)
         return features
 
     def predict(self, features):
