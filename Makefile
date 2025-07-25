@@ -10,12 +10,6 @@ PYTHON_INTERPRETER = python
 # COMMANDS                                                                      #
 #################################################################################
 
-
-## Install Python dependencies
-.PHONY: requirements
-requirements:
-	uv sync
-	
 ## Delete all compiled Python files
 .PHONY: clean
 clean:
@@ -37,15 +31,28 @@ format:
 
 
 
-## Run tests
-.PHONY: test
-test:
+## Run unit tests
+.PHONY: unit-tests
+unit-tests:
 	python -m pytest tests
 
+## Run integration tests
+.PHONY: integration-tests
+integration-tests:
+	@if [ -x ./integration-test/run.sh ]; then \
+		./integration-test/run.sh; \
+	else \
+		chmod +x ./integration-test/run.sh && ./integration-test/run.sh; \
+	fi
+
+## Run both unit and integration tests
+.PHONY: test
+test: unit-tests integration-tests
 
 ## Set up Python interpreter environment
 .PHONY: create_environment
-create_environment: requirements
+create_environment:
+	uv sync
 	@echo ">>> New uv virtual environment created. Activate with:"
 	@echo ">>> Windows: .\\\\.venv\\\\Scripts\\\\activate"
 	@echo ">>> Unix/macOS: source ./.venv/bin/activate"
