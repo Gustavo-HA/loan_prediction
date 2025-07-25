@@ -120,6 +120,10 @@ def init(prediction_stream_name: str, model_id: str, test_run: bool):
     else:
         print("Running in test mode, no Kinesis callback will be used.")
 
-    model_service = ModelService(model=model, model_version=model_id, callbacks=callbacks)
+    model_service = ModelService(
+        model=model,
+        model_version=model_id,
+        callbacks=callbacks
+    )
 
     return model_service
