@@ -3,7 +3,7 @@ import json
 from deepdiff import DeepDiff
 import requests
 
-with open('event.json', 'rt') as f:
+with open("event.json", "rt") as f:
     event = json.load(f)
 
 url = "http://localhost:8080/2015-03-31/functions/function/invocations"
