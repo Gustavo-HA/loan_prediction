@@ -15,8 +15,8 @@ PYTHON_INTERPRETER = python
 clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
-	find . -type d -name ".pytest_cache" -delete
-	find . -type d -name ".ruff_cache" -delete
+	find . -type d -name ".pytest_cache" -exec rm -rf {} +
+	find . -type d -name ".ruff_cache" -exec rm -rf {} +
 
 
 ## Lint using ruff (use `make format` to do formatting)
