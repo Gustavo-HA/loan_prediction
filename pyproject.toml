@@ -57,5 +57,6 @@ dev = [
     "pytest",
     "python-dotenv",
     "kagglehub>=0.3.12",
+    "deepdiff>=8.5.0",
 ]
 
