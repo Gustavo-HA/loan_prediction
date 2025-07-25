@@ -70,10 +70,7 @@ class ModelService:
             prediction_event = {
                 "model": "loan_approval_prediction_model",
                 "model_version": self.model_version,
-                "prediction": {
-                    "approved": bool(prediction[0]), 
-                    "request_id": request_id
-                    },
+                "prediction": {"approved": bool(prediction[0]), "request_id": request_id},
             }
 
             for callback in self.callbacks:
@@ -120,10 +117,6 @@ def init(prediction_stream_name: str, model_id: str, test_run: bool):
     else:
         print("Running in test mode, no Kinesis callback will be used.")
 
-    model_service = ModelService(
-        model=model,
-        model_version=model_id,
-        callbacks=callbacks
-    )
+    model_service = ModelService(model=model, model_version=model_id, callbacks=callbacks)
 
     return model_service
