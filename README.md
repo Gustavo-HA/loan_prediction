@@ -23,19 +23,20 @@ A successful model requires more than just accurate predictions. This project in
 
 
 ## Tech Stack
-* Python
-* Terraform: Infrastructure as Code.
-* AWS (Kinesis, S3, EC2, ECR, Lambda): Services for development and streaming inference.
-* Docker: Containerization
-* uv: Dependency management
-* Prefect: Workflow orchestration
-* MLflow: Experiment tracking & model registry
-* ruff: Linter & code formatter
-* Evidently: Model monitoring
+* **Python**
+* **Terraform**: Infrastructure as Code.
+* **AWS** (Kinesis, S3, EC2, ECR, Lambda): Services for development and streaming inference.
+* **Docker**: Containerization
+* **uv**: Dependency management
+* **Prefect**: Workflow orchestration
+* **MLflow**: Experiment tracking & model registry
+* **ruff**: Linter & code formatter
+* **Evidently**: Model monitoring
 
 ## Requirements
 
 Before setting up the whole project you need to have installed:
+* [Docker](https://docs.docker.com/desktop/)
 * Make
 * [uv](https://docs.astral.sh/uv/getting-started/installation/) Package Manager
 * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html): Use `aws configure` to set up your IAM credentials.
