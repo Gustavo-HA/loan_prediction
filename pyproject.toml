@@ -30,7 +30,13 @@ requires-python = "~=3.12.0"
 [tool.ruff]
 line-length = 99
 src = ["lap"]
-include = ["pyproject.toml", "lap/**/*.py", "deployment/**/*.py"]
+include = [
+    "pyproject.toml",
+    "lap/**/*.py",
+    "deployment/**/*.py",
+    "tests/**/*.py",
+    "integration-test/**/*.py"
+]
 
 [tool.ruff.lint]
 extend-select = ["I"]  # Add import sorting
