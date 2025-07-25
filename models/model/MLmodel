@@ -1,0 +1,39 @@
+artifact_path: s3://gus-mlflow-artifacts/mlartifacts/4/models/m-37d3c61eabaa4dc68607887b2f440b4a/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.0
+is_signature_from_type_hint: false
+mlflow_version: 3.1.1
+model_id: m-37d3c61eabaa4dc68607887b2f440b4a
+model_size_bytes: 40975
+model_uuid: m-37d3c61eabaa4dc68607887b2f440b4a
+prompts: null
+run_id: 2a5ae67ed4d449f1bbb224dd518a0de1
+signature:
+  inputs: '[{"type": "double", "name": "binary__Gender", "required": true}, {"type":
+    "double", "name": "binary__Married", "required": true}, {"type": "double", "name":
+    "binary__Education", "required": true}, {"type": "double", "name": "binary__Self_Employed",
+    "required": true}, {"type": "double", "name": "binary__Credit_History", "required":
+    true}, {"type": "double", "name": "categorical__Property_Area_Rural", "required":
+    true}, {"type": "double", "name": "categorical__Property_Area_Semiurban", "required":
+    true}, {"type": "double", "name": "categorical__Property_Area_Urban", "required":
+    true}, {"type": "double", "name": "ordinal__Dependents", "required": true}, {"type":
+    "double", "name": "ordinal__Loan_Amount_Term", "required": true}, {"type": "double",
+    "name": "numerical__ApplicantIncome", "required": true}, {"type": "double", "name":
+    "numerical__CoapplicantIncome", "required": true}, {"type": "double", "name":
+    "numerical__LoanAmount", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-07-06 23:19:03.716326'
