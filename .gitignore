@@ -193,6 +193,4 @@ cython_debug/
 crash.log
 crash.*.log
 
-*.pkl
-
 *.db
