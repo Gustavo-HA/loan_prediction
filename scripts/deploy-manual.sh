@@ -9,8 +9,12 @@ export LAMBDA_FUNCTION="stg-prediction-lambda_loan-prediction"
 # NOT FOR PRODUCTION!
 # In practice, this is generally picked up from your experiment tracking tool such as MLflow or DVC
 export MODEL_ID=$(aws s3api list-objects-v2 --bucket ${MODEL_BUCKET_PROD} \
---query 'sort_by(Contents, &LastModified)[-1].Key' --output=text | cut -f2 -d/)
+--query 'sort_by(Contents, &LastModified)[-1].Key' --output=text | cut -f3 -d/)
 
+export EXPERIMENT_ID=$(aws s3api list-objects-v2 --bucket ${MODEL_BUCKET_PROD} \
+--query 'sort_by(Contents, &LastModified)[-1].Key' --output=text | cut -f1 -d/)
+
+echo "Latest experiment ID: ${EXPERIMENT_ID}"
 echo "Latest model ID: ${MODEL_ID}"
 
 # Set new var MODEL_ID in existing set of vars.
