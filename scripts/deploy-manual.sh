@@ -11,6 +11,8 @@ export LAMBDA_FUNCTION="stg-prediction-lambda_loan-prediction"
 export MODEL_ID=$(aws s3api list-objects-v2 --bucket ${MODEL_BUCKET_PROD} \
 --query 'sort_by(Contents, &LastModified)[-1].Key' --output=text | cut -f2 -d/)
 
+echo "Latest model ID: ${MODEL_ID}"
+
 # Set new var MODEL_ID in existing set of vars.
 variables="{PREDICTIONS_STREAM_NAME=${PREDICTIONS_STREAM_NAME}, MODEL_BUCKET=${MODEL_BUCKET_PROD}, MODEL_ID=${MODEL_ID}}"
 
