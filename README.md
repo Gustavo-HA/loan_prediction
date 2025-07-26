@@ -33,6 +33,52 @@ A successful model requires more than just accurate predictions. This project in
 * **ruff**: Linter & code formatter
 * **Evidently**: Model monitoring
 
+## Project Organization
+
+```
+loan_prediction/    
+├── LICENSE            <- Open-source license if one is chosen
+├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
+├── README.md          <- The top-level README for developers using this project.
+├── data
+│   ├── external       <- Data from third party sources.
+│   ├── interim        <- Intermediate data that has been transformed.
+│   ├── processed      <- The final, canonical data sets for modeling.
+│   └── raw            <- The original, immutable data dump.
+│
+├── models             <- Trained and serialized models, model predictions, or model summaries
+│
+├── notebooks          <- Jupyter notebooks for visualizations and toy tests.
+│
+├── infrastructure     <- Terraform IaC setup.
+│
+├── pyproject.toml     <- Project configuration file with package metadata for 
+│                         lap (src module) and configuration for tools like black
+│
+├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
+│   └── figures        <- Generated graphics and figures to be used in reporting
+│
+├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
+│                         generated with `pip freeze > requirements.txt`
+│
+└── lap   <- Source code for use in this project.
+    │
+    ├── __init__.py             <- Makes lap a Python module
+    │
+    ├── config.py               <- Store useful variables and configuration
+    │
+    ├── dataset.py              <- Script to create the processed dataset
+    │
+    └── modeling                
+        ├── __init__.py 
+        ├── hp_optim.py         <- Code to make hyperparameter optimization of specific model
+        ├── model_selection.py  <- Code to test several models and select the best 
+        ├── predict.py          <- Code to run model inference with trained models          
+        └── train.py            <- Code to train models
+```
+
+--------
+
 ## Requirements
 
 Before setting up the whole project you need to have installed:
@@ -121,49 +167,5 @@ This previous command will also put the final model in the Mlflow's Model Regist
 </p>
 
 
-## Project Organization
 
-```
-loan_prediction/    
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks for visualizations and toy tests.
-│
-├── infrastructure     <- Terraform IaC setup.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         lap (src module) and configuration for tools like black
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-└── lap   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes lap a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Script to create the processed dataset
-    │
-    └── modeling                
-        ├── __init__.py 
-        ├── hp_optim.py         <- Code to make hyperparameter optimization of specific model
-        ├── model_selection.py  <- Code to test several models and select the best 
-        ├── predict.py          <- Code to run model inference with trained models          
-        └── train.py            <- Code to train models
-```
-
---------
 
