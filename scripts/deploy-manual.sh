@@ -18,7 +18,7 @@ echo "Latest experiment ID: ${EXPERIMENT_ID}"
 echo "Latest model ID: ${MODEL_ID}"
 
 # Set new var MODEL_ID in existing set of vars.
-variables="{PREDICTIONS_STREAM_NAME=${PREDICTIONS_STREAM_NAME}, MODEL_BUCKET=${MODEL_BUCKET_PROD}, MODEL_ID=${MODEL_ID}}"
+variables="{PREDICTIONS_STREAM_NAME=${PREDICTIONS_STREAM_NAME}, MODEL_BUCKET=${MODEL_BUCKET_PROD}, MODEL_ID=${MODEL_ID}, EXPERIMENT_ID=${EXPERIMENT_ID}}"
 
 # https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html
 aws lambda update-function-configuration --function-name ${LAMBDA_FUNCTION} --environment "Variables=${variables}"
