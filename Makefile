@@ -10,6 +10,11 @@ PYTHON_INTERPRETER = python
 # COMMANDS                                                                      #
 #################################################################################
 
+## Install requirements
+.PHONY: requirements
+requirements:
+	uv sync
+
 ## Delete all compiled Python files
 .PHONY: clean
 clean:
