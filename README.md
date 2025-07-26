@@ -82,7 +82,7 @@ loan_prediction/
 ## Requirements
 
 Before setting up the whole project you need to have installed:
-* [Docker](https://docs.docker.com/desktop/)
+* [Docker](https://docs.docker.com/desktop/): Including `docker compose` command
 * Make
 * [uv](https://docs.astral.sh/uv/getting-started/installation/) Package Manager
 * [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html): Use `aws configure` to set up your IAM credentials.
