@@ -16,6 +16,7 @@ resource "aws_lambda_function" "kinesis_lambda" {
         MODEL_BUCKET = var.model_bucket
       }
     }
+    memory_size = 250
     timeout = 100
 }
 
