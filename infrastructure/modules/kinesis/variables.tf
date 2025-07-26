@@ -16,7 +16,7 @@ variable "retention_period" {
 variable "shard_level_metrics" {
   description = "List of shard-level metrics to enable for the Kinesis stream"
   type        = list(string)
-  default     = []
+  default     = ["IncomingRecords", "OutgoingRecords"]
 }
 
 variable "tags" {
