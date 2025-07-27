@@ -23,11 +23,11 @@ SHARD_ID_WITH_QUOTES=$(aws kinesis put-record \
         --query 'ShardId'
     )
 
-echo "SHARD_ID: ${SHARD_ID_WITH_QUOTES}"
-
 SHARD_ID=$(echo $SHARD_ID_WITH_QUOTES | tr -d '"')
 
-echo "Clean SHARD_ID: ${SHARD_ID}" # Verify it's clean
+echo "SHARD_ID: ${SHARD_ID}" # Verify it's clean
+
+sleep 5 # Wait for the Lambda function to process the record
 
 SHARD_ITERATOR=$(aws kinesis get-shard-iterator --shard-id ${SHARD_ID} --shard-iterator-type TRIM_HORIZON --stream-name ${KINESIS_STREAM_OUTPUT} --query 'ShardIterator')
 
