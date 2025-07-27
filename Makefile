@@ -111,6 +111,24 @@ aws_destroy:
 	cd infrastructure && \
 	terraform destroy -var-file=./vars/stg.tfvars
 
+## Set env variables into lambda function
+.PHONY: set_env_vars
+set_env_vars:
+	@if [ -x ./scripts/deploy-manual.sh ]; then \
+		./scripts/deploy-manual.sh; \
+	else \
+		chmod +x ./scripts/deploy-manual.sh && ./scripts/deploy-manual.sh; \
+	fi
+
+## Test online inference
+.PHONY: test_online_inference
+test_online_inference:
+	@if [ -x ./scripts/test-cloud-e2e.sh ]; then \
+		./scripts/test-cloud-e2e.sh; \
+	else \
+		chmod +x ./scripts/test-cloud-e2e.sh && ./scripts/test-cloud-e2e.sh; \
+	fi
+
 #################################################################################
 # Self Documenting Commands                                                     #
 #################################################################################
