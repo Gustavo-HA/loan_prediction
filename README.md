@@ -159,10 +159,10 @@ It then will ask you permission to run the services, type "yes" and hit enter.
     <img src="./reports/figures/terraform_create.png" width="50%" alt="Terraform apply command output." />
 </p>
 
-If you want to set an online tracking server you need to manually create an EC2 instance, set boundary rules to the S3 bucket to store the model artifacts and run the following command in the terminal. Otherwise, you could do it locally; open a new terminal, activate the environment and run.
+If you want to set an online tracking server you need to manually create an EC2 instance, set boundary rules to the S3 bucket to store the model artifacts and run the following command in the terminal (This will also require you to configure a .env file with the variable `MLFLOW_TRACKING_SERVER`). Otherwise, you could do it locally; open a new terminal, activate the environment and run.
 
 ```bash
-mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://<MODEL-S3-BUCKET>
+mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://stg-mlflow-models-loan-prediction
 ```
 Now that you have the tracking server running, you can proceed to train several models, perform hyperparameter optimization on the best algorithm and train the final model with
 
@@ -182,12 +182,15 @@ Now that we have the model that we'll be using for inference, it's time to mount
 ```bash
 make set_env_vars
 ```
+You should see a confirmation message with the Lambda function details. Ensure the environment variables are set correctly before proceeding to inference tests.
 
 At this point we have succesfully deployed the model and is completely ready for inference. We can test the functionality with the `put-record` kinesis API to insert a record into the input stream and look for the prediction in the output stream using the `get-record` API. This is also done with a [script](./scripts/test-cloud-e2e.sh), we can execute it with
 
 ```bash
 make test_online_inference
 ```
+
+After running, you should see a SHARD_ID and a list of records in the output stream. Each record contains a prediction result encoded in base64. Successful output confirms that the end-to-end inference pipeline is working as expected.
 
 ---
 
