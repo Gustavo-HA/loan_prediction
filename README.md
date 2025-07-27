@@ -189,3 +189,15 @@ At this point we have succesfully deployed the model and is completely ready for
 make test_online_inference
 ```
 
+---
+
+**Important:**
+
+Once you have finished testing or using the project, make sure to clean up all AWS resources to avoid unnecessary costs. You can do this by running:
+
+```bash
+make aws_destroy
+```
+
+This command will prompt you for confirmation; type "yes" when asked by Terraform to proceed with the deletion of all Amazon services created for this project.
+
