@@ -1,25 +1,30 @@
 <h1 align="center">
-    <strong>Loan Prediction - Automating Loan Eligibility - MLOps</strong>
+    <strong>Loan Prediction: Automating Loan Eligibility with MLOps</strong>
 </h1>
 
-<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
-    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
-</a>
+## Introduction
 
-This project serves as the capstone for the [MLOps Zoomcamp](https://github.com/DataTalksClub/mlops-zoomcamp) by DataTalks.Club. It applies the MLOps principles learned throughout the course to a real-world classification problem.
+This project is the capstone for the [MLOps Zoomcamp](https://github.com/DataTalksClub/mlops-zoomcamp) by DataTalks.Club. It applies MLOps principles to a real-world classification problem: predicting loan eligibility.
 
-The task is to predict loan eligibility using a dataset from [Kaggle](https://www.kaggle.com/datasets/altruist/loan-prediction-problem-dataset). Preliminary data analysis, which guided the development process, can be found in the `notebooks/` directory.
+We'll be using a dataset from [Kaggle](https://www.kaggle.com/datasets/altruist/loan-prediction-problem-dataset). Preliminary data analysis, which guided the development process, can be found in the `notebooks/` directory.
 
-## Task Description
+This project implements the complete machine learning lifecycle, leveraging Terraform for infrastructure provisioning, MLflow for modeling and experiment tracking, Prefect for workflow orchestration, and deployment via Docker, AWS Lambda, and Kinesis. Monitoring is handled with Evidently and Grafana. Best practices are followed throughout, including integration testing with LocalStack, unit testing, code linting and formatting with ruff, and workflow automation using Makefile.
 
-### The Challenge
-Manually reviewing loan applications is **slow, expensive, and can lead to inconsistent decisions**. The core challenge is to replace this subjective process with a fast, data-driven system to accurately assess an applicant's eligibility in **real time**.
 
-### The Solution
-This project builds a ML classification model to automate the loan eligibility process. Using applicant details like income, credit history, and marital status, the model provides instant recommendations. The goal is to increase efficiency, reduce human bias, and create a scalable system for real-time loan approval.
 
-### MLOps Focus
-A successful model requires more than just accurate predictions. This project incorporates **MLOps practices** to ensure the entire system is robust, scalable, and maintainable, making it suitable for a real-world, production environment.
+## Project Context & Problem Statement
+
+Financial institutions face the challenge of evaluating loan applications quickly, fairly, and at scale. Human review is essential for nuanced decision-making, but manual processes are slow, costly, and subject to bias or inconsistency. In a competitive market, organizations need tools that can provide objective, data-driven insights to support and enhance the decision process.
+
+This project delivers a machine learning solution that predicts loan eligibility based on applicant data—such as income, credit history, and demographic factors. The model is designed not as a replacement for human expertise, but as a **decision-support tool**: its predictions can be used as an input to broader workflows, other models, or as a factor in human review. By integrating this model, lenders can:
+
+- Accelerate initial screening and triage
+- Reduce manual workload for routine cases
+- Improve consistency and transparency in decision-making
+- Enable scalable, real-time risk assessment
+
+The output of this system is intended to be consumed by downstream processes—whether automated or human—helping organizations make better, faster, and more consistent lending decisions.
+
 
 
 ## Tech Stack
@@ -31,7 +36,14 @@ A successful model requires more than just accurate predictions. This project in
 * **Prefect**: Workflow orchestration
 * **MLflow**: Experiment tracking & model registry
 * **ruff**: Linter & code formatter
-* **Evidently**: Model monitoring
+* **LocalStack**: Test cloud services
+
+## Good practices
+- [x] Unit tests using Pytest
+- [x] Integration tests using LocalStack for cloud services
+- [x] Linter and code formatter using ruff
+- [x] Makefile to automate building and managing dependencies
+- [x] IaC with Terraform
 
 ## Project Organization
 
@@ -58,8 +70,6 @@ loan_prediction/
 ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
 │   └── figures        <- Generated graphics and figures to be used in reporting
 │
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
 │
 └── lap   <- Source code for use in this project.
     │
@@ -160,12 +170,22 @@ Now that you have the tracking server running, you can proceed to train several 
 make data_train_pipeline 
 ```
 
-This previous command will also put the final model in the Mlflow's Model Registry (Locally on [http://localhost:5000/#/experiments/1/models](http://localhost:5000/#/experiments/1/models)). From there, one is able to retrieve the model id 
+You could also verify the whole pipeline orchestration with [Prefect Cloud](https://app.prefect.cloud/) in Runs.
 
 <p align="center">
-    <img src="./reports/figures/modelid.png" width="50%" alt="Terraform apply command output." />
+    <img src="./reports/figures/prefect.png" width="75%" alt="Prefect Run." />
 </p>
 
 
+Now that we have the model that we'll be using for inference, it's time to mount it to the lambda function. The way we'll do this is by defining environment variables within the lambda function, so that it can succesfully call the correct model. The way we do this is by running a [manual script](./scripts/deploy-manual.sh) which will set the `EXPERIMENT_ID` and `MODEL_ID` env variables to point to the latest model created within our s3 bucket (at this point, it corresponds to the final model). We can do it via
 
+```bash
+make set_env_vars
+```
+
+At this point we have succesfully deployed the model and is completely ready for inference. We can test the functionality with the `put-record` kinesis API to insert a record into the input stream and look for the prediction in the output stream using the `get-record` API. This is also done with a [script](./scripts/test-cloud-e2e.sh), we can execute it with
+
+```bash
+make test_online_inference
+```
 
