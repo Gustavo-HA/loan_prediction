@@ -8,7 +8,7 @@ This project is the capstone for the [MLOps Zoomcamp](https://github.com/DataTal
 
 We'll be using a dataset from [Kaggle](https://www.kaggle.com/datasets/altruist/loan-prediction-problem-dataset). Preliminary data analysis, which guided the development process, can be found in the `notebooks/` directory.
 
-This project implements the complete machine learning lifecycle, leveraging Terraform for infrastructure provisioning, MLflow for modeling and experiment tracking, Prefect for workflow orchestration, and deployment via Docker, AWS Lambda, and Kinesis. Monitoring is handled with Evidently and Grafana. Best practices are followed throughout, including integration testing with LocalStack, unit testing, code linting and formatting with ruff, and workflow automation using Makefile.
+This project implements the complete machine learning lifecycle, leveraging Terraform for infrastructure provisioning, MLflow for modeling and experiment tracking, Prefect for workflow orchestration, and deployment via Docker, AWS Lambda, and Kinesis. Best practices are followed throughout, including integration testing with LocalStack, unit testing, code linting and formatting with ruff, and workflow automation using Makefile.
 
 
 
@@ -122,6 +122,8 @@ source ./venv/bin/activate
 # Windows
 .\venv\bin\activate
 ```
+
+Sign into your Prefect account using `uvx prefect-cloud login` and follow instructions.
 
 Create, clean and preprocess the dataset using:
 
