@@ -194,15 +194,12 @@ make test_online_inference
 
 After running, you should see a SHARD_ID and a list of records in the output stream. Each record contains a prediction result encoded in base64. Successful output confirms that the end-to-end inference pipeline is working as expected.
 
+> [!NOTE]
+> Records may take some time to appear. This is because of Lambda cold starts or deployment lag. Just try waiting ~30 seconds to run the command again.
+
 ---
 
-**Important:**
 
-Once you have finished testing or using the project, make sure to clean up all AWS resources to avoid unnecessary costs. You can do this by running:
-
-```bash
-make aws_destroy
-```
-
-This command will prompt you for confirmation; type "yes" when asked by Terraform to proceed with the deletion of all Amazon services created for this project.
+> [!WARNING]
+> Once you have finished testing or using the project, make sure to clean up all AWS resources to avoid unnecessary costs. You can do this by running `make aws_destroy`. This command will prompt you for confirmation; type "yes" when asked by Terraform to proceed with the deletion of all Amazon services created for this project.
 
