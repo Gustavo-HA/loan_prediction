@@ -208,7 +208,7 @@ After running, you should see a SHARD_ID and a list of records in the output str
 You can directly run both unit tests and integration tests using
 
 ```bash
-make tests
+make test
 ```
 
 If you want to run them separately you coud do
@@ -217,6 +217,6 @@ If you want to run them separately you coud do
 # For unit tests
 make unit-tests
 
-# For integration-test
-make integration-test
+# For integration-tests
+make integration-tests
 ```
