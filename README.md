@@ -203,3 +203,20 @@ After running, you should see a SHARD_ID and a list of records in the output str
 > [!WARNING]
 > Once you have finished testing or using the project, make sure to clean up all AWS resources to avoid unnecessary costs. You can do this by running `make aws_destroy`. This command will prompt you for confirmation; type "yes" when asked by Terraform to proceed with the deletion of all Amazon services created for this project.
 
+### Tests
+
+You can directly run both unit tests and integration tests using
+
+```bash
+make tests
+```
+
+If you want to run them separately you coud do
+
+```bash
+# For unit tests
+make unit-tests
+
+# For integration-test
+make integration-test
+```
