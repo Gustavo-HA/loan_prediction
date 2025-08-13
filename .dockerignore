@@ -14,6 +14,9 @@ notebooks/
 tests/
 docs/
 references/
+integration-test/
+reports/
+scripts/
 
 # Local environment files
 .env
